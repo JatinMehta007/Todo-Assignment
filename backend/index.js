@@ -104,9 +104,7 @@ app.post("/signup", async (res,req) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
-  }
-
-    
-    
+  } 
 })
+
 app.listen(3000);

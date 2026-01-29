@@ -1,23 +1,13 @@
-// write  basic express boiler plate code,
-// with express.json() middlewares
-
-/* body{
-    title : string;
-    descipion:string;
-}*/
-
 const express = require("express");
-const { createTodo } = require("./types");
-const { todo } = require("./db");
 const app = express();
+app.use(express.json());
+const { createTodo, updateTodo } = require("./types");
+const { todo } = require("./db");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const { User } = require("./db");
 const jwt = require("jsonwebtoken");
 
-
-app.use(express.json());
-// in this you can allow the fronted at any server it can run  
 app.use(cors({}));
 
 app.post("/todo", async function (req, res) {
@@ -33,12 +23,9 @@ app.post("/todo", async function (req, res) {
   const newTodo = await todo.create({
     title: createPayload.title,
     description: createPayload.description,
-    completed:false
+    completed: false
   });
 
-  // res.json({
-  //   msg: " todo created",
-  // });
   res.json(newTodo);
 });
 
@@ -51,44 +38,42 @@ app.get("/todos", async function (req, res) {
    })
 });
 
-
-app.put("/completed",async function (req, res) {
+app.put("/completed", async function (req, res) {
   const updatePayload = req.body;
   const parsedPayload = updateTodo.safeParse(updatePayload);
+
   if (!parsedPayload.success) {
-    res.status(411).json({
+    return res.status(411).json({
       msg: "You sent the wrong inputs",
     });
-    return;
   }
-  await todo.update({
-    _id : req.body.id
-  },{
-    completed : true
-  })
 
-  res.json({
-    msg : "Todo marked  as completed" 
-  })
+  await todo.findByIdAndUpdate(req.body.id, {
+    completed: true
+  });
+
+  return res.json({
+    msg: "Todo marked as completed"
+  });
 });
 
 
-app.post("/signup", async (res,req) => {
+app.post("/signup", async (req,res) => {
   try{
-    const {name, email, password} = req.body;
+    const {username, email, password} = req.body;
     
       const existingUser = await User.findOne({
          email 
       })
 
-      if(!existingUser){
+      if(existingUser){
       return res.status(400).json({ message: "User already exists" });
       }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
-      name ,
+      username ,
       email,
       password : hashedPassword
     })
@@ -97,14 +82,37 @@ app.post("/signup", async (res,req) => {
       id: newUser._id
     }, process.env.JWT_SECRET,{expiresIn : "7d"});
 
-    res.json(201).json({
-      token, user:newUser
+   return res.status(201).json({
+      token, 
+      user : newUser
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+   return res.status(500).json({ message: "Server error" });
   } 
 })
 
-app.listen(3000);
+app.delete("/user/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User deleted successfully",
+      deletedUser
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+app.listen(3000,() => console.log("server is good"));

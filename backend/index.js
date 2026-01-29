@@ -11,6 +11,9 @@ const { createTodo } = require("./types");
 const { todo } = require("./db");
 const app = express();
 const cors = require("cors");
+const bcrypt = require("bcrypt");
+const { User } = require("./db");
+const jwt = require("jsonwebtoken");
 
 
 app.use(express.json());
@@ -69,4 +72,41 @@ app.put("/completed",async function (req, res) {
   })
 });
 
+
+app.post("/signup", async (res,req) => {
+  try{
+    const {name, email, password} = req.body;
+    
+      const existingUser = await User.findOne({
+         email 
+      })
+
+      if(!existingUser){
+      return res.status(400).json({ message: "User already exists" });
+      }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      name ,
+      email,
+      password : hashedPassword
+    })
+    
+    const token = jwt.sign({
+      id: newUser._id
+    }, process.env.JWT_SECRET,{expiresIn : "7d"});
+
+    res.json(201).json({
+      token, user:newUser
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+
+    
+    
+})
 app.listen(3000);

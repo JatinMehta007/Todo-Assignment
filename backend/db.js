@@ -1,24 +1,27 @@
-// mongodb+srv://admin:jatin@cluster0.pbdobtk.mongodb.net/
+require('dotenv').config();
 
-/*
-Todo{
-    title : string ,
-    description : String,
-    completed : boolean
-}
-*/ 
 const mongoose = require("mongoose")
 
-// this was not the right thing to do
-mongoose.connect("mongodb+srv://admin:jatin@cluster0.pbdobtk.mongodb.net/Poornima_Todo");
-const todoSchema =  mongoose.Schema({
+
+mongoose.connect(process.env.MONGODB_URI);
+
+const todoSchema = new mongoose.Schema({
     title : String,
     description: String,
     completed : Boolean
 
 });
 
+const UserSchema = new mongoose.Schema({
+    name : String,
+    email : {type : String, unique: true},
+    password : String,
+})
+
 const todo = mongoose.model('todos',todoSchema);
+const User = mongoose.model('user',UserSchema);
+
 module.exports = {
-   todo
+   todo,
+   User
 }

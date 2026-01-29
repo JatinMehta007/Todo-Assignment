@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import './App.css'
-import { CreateTodo } from './component/CreateTodo'
-import { Todos } from './component/Todos'
+import { Navbar }from './component/Navbar';
+import { LandingPage } from './component/Landingpage';
+import { Footer } from './component/Footer';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -16,6 +17,10 @@ function App() {
     <div>
      {/* <CreateTodo setTodos={setTodos}></CreateTodo>
      <Todos todos={todos}></Todos> */}
+     <Navbar></Navbar>
+
+     <LandingPage></LandingPage>
+     <Footer></Footer>
     </div>
   )
 }

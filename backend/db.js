@@ -9,11 +9,10 @@ const todoSchema = new mongoose.Schema({
     title : String,
     description: String,
     completed : Boolean
-
 });
 
 const UserSchema = new mongoose.Schema({
-    name : String,
+    username : String,
     email : {type : String, unique: true},
     password : String,
 })

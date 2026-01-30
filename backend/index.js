@@ -235,4 +235,10 @@ app.delete("/board/:id", auth, async (req, res) => {
   }
 });
 
-app.listen(3000,() => console.log("server is good"));
+if (process.env.NODE_ENV !== "production") {
+  app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+  });
+}
+
+module.exports = app;

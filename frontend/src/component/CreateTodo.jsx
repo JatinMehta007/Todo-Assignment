@@ -8,12 +8,10 @@ export function CreateTodo({setTodos}) {
    return <div className="flex  font-used gap-5 mt-10 justify-center items-center ">
       <div>
       <p className="font-black text-2xl">Title</p>
-      <input id="title" className="px-2 border h-8" type="text" placeholder="Title" onChange={function (e) {
-         const value = e.target.value;
+      <input id="title" className="px-2 border h-8" type="text" placeholder="Title" onChange={(e) => {
          setTitle(e.target.value);
       }} ></input> <br />
       </div>
-
       <div>
       <p className="font-black text-2xl">Description</p>
       <textarea id="desc" type="text" className="px-2 h-8 mt-1 border resize-none" placeholder="Description" onChange={ (e)=> {
@@ -22,7 +20,7 @@ export function CreateTodo({setTodos}) {
       </div>
 
       <button className="bg-[#0083ff] text-white    px-5 font-bold py-3" onClick={() => {
-         // axois
+         
          fetch("http://localhost:3000/todo", {
             method: "POST",
             body: JSON.stringify({ title, description }),

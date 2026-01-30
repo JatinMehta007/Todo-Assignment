@@ -27,6 +27,10 @@ function auth(req, res, next) {
   }
 }
 
+app.get("/", (req, res) => {
+  res.send("Backend Running 🚀");
+}); 
+
 app.post("/todo",auth, async function (req, res) {
   const createPayload = req.body;
   const parsedPayload = createTodo.safeParse(createPayload);

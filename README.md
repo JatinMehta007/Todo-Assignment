@@ -6,6 +6,11 @@ A modern task management web app where users can create boards and manage todos 
 
 ---
 
+## Screenshots
+---
+![ Screenshot](./frontend/public/image.png) 
+---
+
 ## ✨ Features
 
 - 🔐 User Authentication (Signup / Login)

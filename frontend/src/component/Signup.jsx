@@ -16,8 +16,7 @@ export function Signup() {
                 email,
                 password
             });
-
-            localStorage.setItem("token",res.data.token);
+          localStorage.setItem("token",res.data.token);
             toast.success('Signup Successfully!')
             window.location.href = "/dashboard";
         } catch (err) {

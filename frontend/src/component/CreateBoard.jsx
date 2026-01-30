@@ -18,7 +18,6 @@ export function CreateBoard({ setBoards , boards}) {
         }
       }
     );
-
     setBoards(prev => [...prev, res.data]);
     setName("");
     toast.success("Board Created");
@@ -28,7 +27,6 @@ export function CreateBoard({ setBoards , boards}) {
     <div className="flex flex-col font-used gap-5 mt-10 justify-center items-center">
         <p className="flex font-black flex-col text-center text-7xl  "> Organize Your Work with  <span className="text-blue-500 underline">Boards</span> </p>
 
-       
             <div className=" gap-4 flex ">
       <input
         value={name}
@@ -42,9 +40,7 @@ export function CreateBoard({ setBoards , boards}) {
         >
         Create Board
       </button>
-
           </div>
-
           {boards.length === 0 && (
         <div className="mt-10 text-center">
           <h2 className="text-3xl font-black text-zinc-700">

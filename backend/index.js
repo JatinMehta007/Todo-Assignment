@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 
 app.use(cors());
 
+
 function auth(req, res, next) {
   const token = req.headers.authorization;
 

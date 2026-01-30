@@ -6,13 +6,16 @@ import { Navbar } from "./Navbar";
 export function Dashboard(){
     const [todos, setTodos] = useState([]);
 
-    useEffect(()=>{
-        fetch("http://localhost:3000/todos")
-        .then(async function(res){
-            const json = await res.json();
-            setTodos(json.todos);
+    useEffect(() => {
+        fetch("http://localhost:3000/todos", {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+          }
         })
-    })
+          .then(res => res.json())
+          .then(data => setTodos(data.todos));
+      }, []);
 
     return(
         <div>
@@ -20,6 +23,7 @@ export function Dashboard(){
 
         <CreateTodo setTodos={setTodos}></CreateTodo>
         <Todos todos={todos} setTodos = {setTodos}></Todos>
+        
         </div>
     )
 }

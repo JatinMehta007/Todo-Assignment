@@ -21,6 +21,7 @@ export function Boards({ boards,setBoards }) {
       toast.error("Delete failed");
     }
   };
+  
   return (
     <div>
       {boards.map(board => (

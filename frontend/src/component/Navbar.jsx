@@ -12,7 +12,6 @@ export function Navbar() {
 
   return (
     <div className="flex font-used items-center bg-zinc-50 justify-between px-20 w-screen h-28">
-      
       <div className="font-black text-3xl cursor-pointer">
         Todo<span className="inline-block bg-blue-500 rounded-full h-2 w-2"></span>Board
       </div>

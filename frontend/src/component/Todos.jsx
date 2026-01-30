@@ -53,8 +53,7 @@ export function Todos({ todos, setTodos }) {
               <div>
               <h1 className="text-black text-2xl capitalize font-black">
               {todo.title}
-              </h1>
-              
+              </h1> 
               <h2>{todo.description}</h2>
               </div>
               <div className="flex justify-end gap-5 items-center">

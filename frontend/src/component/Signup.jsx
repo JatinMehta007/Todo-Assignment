@@ -46,7 +46,7 @@ export function Signup() {
                         <p className="text-xl mt-5">Password</p>
                         <input value={password} onChange={ (e) => setPassword(e.target.value)} type="password" placeholder="**********" className="bg-transparent border px-2 text-xs h-7 w-64 mt-2 " />
                     </div>
-                    <button onClick={handleSignup} className="bg-[#0083ff] font-normal text-white text-base w-full mt-10 px-5 rounded-full py-1">
+                    <button onClick={handleSignup} className="bg-[#0083ff] font-used text-white text-base w-full mt-10 px-5 rounded-full py-1">
                         SignUp
                     </button>
                 </div>

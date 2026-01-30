@@ -8,11 +8,28 @@ const bcrypt = require("bcrypt");
 const { User } = require("./db");
 const jwt = require("jsonwebtoken");
 
-app.use(cors({}));
+app.use(cors());
 
-app.post("/todo", async function (req, res) {
+function auth(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+}
+
+app.post("/todo",auth, async function (req, res) {
   const createPayload = req.body;
   const parsedPayload = createTodo.safeParse(createPayload);
+
   if (!parsedPayload.success) {
     res.status(411).json({
       msg: "You sent the wrong inputs",
@@ -23,22 +40,23 @@ app.post("/todo", async function (req, res) {
   const newTodo = await todo.create({
     title: createPayload.title,
     description: createPayload.description,
-    completed: false
+    completed: false,
+    userId: req.userId
   });
 
   res.json(newTodo);
 });
 
 
-app.get("/todos", async function (req, res) {
-  const todos = await todo.find(); // i will write the title and description inside todo find
+app.get("/todos",auth, async function (req, res) {
+  const todos = await todo.find({userId:req.userId}); // i will write the title and description inside todo find
 
    res.json({
     todos
    })
 });
 
-app.put("/completed", async function (req, res) {
+app.put("/completed",auth, async function (req, res) {
   const updatePayload = req.body;
   const parsedPayload = updateTodo.safeParse(updatePayload);
 
@@ -48,9 +66,10 @@ app.put("/completed", async function (req, res) {
     });
   }
 
-  await todo.findByIdAndUpdate(req.body.id, {
-    completed: true
-  });
+  await todo.findOneAndUpdate(
+    { _id: req.body.id, userId: req.userId },
+    { completed: true }
+  );
 
   return res.json({
     msg: "Todo marked as completed"
@@ -93,24 +112,22 @@ app.post("/signup", async (req,res) => {
   } 
 })
 
-app.delete("/user/:id", async (req, res) => {
+
+app.delete("/todo/:id", auth, async (req, res) => {
   try {
-    const id = req.params.id;
-
-    const deletedUser = await User.findByIdAndDelete(id);
-
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({
-      message: "User deleted successfully",
-      deletedUser
+    const deleted = await todo.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.userId
     });
 
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    if (!deleted) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json({ message: "Todo deleted" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 

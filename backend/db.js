@@ -20,10 +20,20 @@ const UserSchema = new mongoose.Schema({
     password : String,
 })
 
+const BoardSchema  = new mongoose.Schema({
+    name : String,
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "board"
+    }
+})
+
 const todo = mongoose.model('todos',todoSchema);
 const User = mongoose.model('user',UserSchema);
+const Board = mongoose.model('board',BoardSchema);
 
 module.exports = {
    todo,
-   User
+   User,
+   Board
 }

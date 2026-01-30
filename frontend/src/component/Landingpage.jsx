@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom"
+
 export function LandingPage(){
+  const navigate = useNavigate();
     return(
         <div className="  flex mt-28 font-used  flex-col justify-center items-center">
     <div className='flex font-black flex-col text-center text-7xl  '>  
@@ -24,7 +27,7 @@ export function LandingPage(){
      Create boards, organize todos, and stay focused with our simple task management app.
      </div>
 
-     <button className="bg-[#0083ff] text-white text-2xl mt-10 px-14 rounded-full py-5">Get Started. It's FREE </button>
+     <button onClick={()=>navigate("/signup")} className="bg-[#0083ff] text-white text-2xl mt-10 px-14 rounded-full py-5">Get Started. It's FREE </button>
         <div className="mt-20">
      <img src="./todo.webp" alt="" />
         </div>

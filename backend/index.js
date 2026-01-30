@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const { createTodo, updateTodo } = require("./types");
-const { todo } = require("./db");
+const { todo, Board } = require("./db");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const { User } = require("./db");
@@ -36,12 +36,13 @@ app.post("/todo",auth, async function (req, res) {
     });
     return;
   }
-  // put it in mongodb
+
   const newTodo = await todo.create({
     title: createPayload.title,
     description: createPayload.description,
     completed: false,
-    userId: req.userId
+    userId: req.userId,
+    boardId: createPayload.boardId 
   });
 
   res.json(newTodo);
@@ -49,7 +50,7 @@ app.post("/todo",auth, async function (req, res) {
 
 
 app.get("/todos",auth, async function (req, res) {
-  const todos = await todo.find({userId:req.userId}); // i will write the title and description inside todo find
+  const todos = await todo.find({userId:req.userId});
 
    res.json({
     todos
@@ -80,7 +81,6 @@ app.put("/completed",auth, async function (req, res) {
 app.post("/signup", async (req,res) => {
   try{
     const {username, email, password} = req.body;
-    
       const existingUser = await User.findOne({
          email 
       })
@@ -112,6 +112,40 @@ app.post("/signup", async (req,res) => {
   } 
 })
 
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server error" });
+  }
+});
+
 
 app.delete("/todo/:id", auth, async (req, res) => {
   try {
@@ -131,5 +165,73 @@ app.delete("/todo/:id", auth, async (req, res) => {
   }
 });
 
+app.post("/board", auth, async (req, res) => {
+  try {
+    const board = await Board.create({
+      name: req.body.name,
+      userId: req.userId
+    });
+
+    res.json(board);
+  } catch (err) {
+    res.status(500).json({ message: "Error creating board" });
+  }
+});
+
+app.get("/boards", auth, async (req, res) => {
+  const boards = await Board.find({ userId: req.userId });
+  res.json({ boards });
+});
+
+app.get("/board/:id", auth, async (req, res) => {
+  try {
+    const board = await Board.findOne({
+      _id: req.params.id,
+      userId: req.userId
+    });
+
+    if (!board) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+
+    res.json(board);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.get("/todos/:boardId", auth, async (req, res) => {
+  const todos = await todo.find({
+    boardId: req.params.boardId,
+    userId: req.userId
+  });
+
+  res.json({ todos });
+});
+
+app.delete("/board/:id", auth, async (req, res) => {
+  try {
+    const boardId = req.params.id;
+
+    const deletedBoard = await Board.findOneAndDelete({
+      _id: boardId,
+      userId: req.userId
+    });
+
+    if (!deletedBoard) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+    
+    await todo.deleteMany({ boardId: boardId });
+
+    return res.json({
+      message: "Board deleted successfully"
+    });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
 
 app.listen(3000,() => console.log("server is good"));

@@ -1,9 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-// start with capital letter CreateTodo
 export function CreateTodo({setTodos}) {
-   // react query
    const [title, setTitle] = useState("");
    const [description, setDescription] = useState("");
 
@@ -18,8 +16,7 @@ export function CreateTodo({setTodos}) {
 
       <div>
       <p className="font-black text-2xl">Description</p>
-      <textarea id="desc" type="text" className="px-2 h-8 mt-1 border resize-none" placeholder="Description" onChange={function (e) {
-         const value = e.target.value;
+      <textarea id="desc" type="text" className="px-2 h-8 mt-1 border resize-none" placeholder="Description" onChange={ (e)=> {
          setDescription(e.target.value);
       }} /> 
       </div>

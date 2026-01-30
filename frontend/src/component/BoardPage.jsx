@@ -32,8 +32,6 @@ export function BoardPage() {
       .catch(err => console.error(err));
   }, [id]);
 
-
-
   return (
     <div>
       <Navbar />
@@ -42,10 +40,8 @@ export function BoardPage() {
         {boardName}
       </h1>
 
-      {/* Create Todo for this board */}
       <CreateTodo setTodos={setTodos} boardId={id} />
 
-      {/* List Todos */}
       <Todos todos={todos} setTodos={setTodos} />
     </div>
   );

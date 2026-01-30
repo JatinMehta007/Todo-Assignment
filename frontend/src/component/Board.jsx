@@ -3,12 +3,16 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
+import { useState } from "react";
+import { Spinner } from "./Spinner";
 
 export function Boards({ boards,setBoards }) {
   const navigate = useNavigate();
-  
+  const [loading, setLoading] = useState(false);
+
   const deleteBoard = async (id) => {
     try {
+      setLoading(true)
       await axios.delete(`${BACKEND_URL}/board/${id}`, {
         headers: {
           Authorization: localStorage.getItem("token")
@@ -20,8 +24,21 @@ export function Boards({ boards,setBoards }) {
   
     } catch (err) {
       toast.error("Delete failed");
+    } finally{
+      setLoading(false);
     }
   };
+
+  if(loading){
+
+    if (loading) {
+      return (
+        <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm">
+          <Spinner />
+        </div>
+      );
+    }
+  }
 
   return (
     <div>

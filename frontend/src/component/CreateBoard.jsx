@@ -3,26 +3,42 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BACKEND_URL } from "../../config";
+import { Spinner } from "./Spinner";
 
 export function CreateBoard({ setBoards , boards}) {
   const [name, setName] = useState("");
+  const [loading, setLoading]= useState(false);
 
   const createBoard = async () => {
-    if (!name) return toast.error("Board name required");
-
-    const res = await axios.post(
-      `${BACKEND_URL}/board`,
-      { name },
-      {
-        headers: {
-          Authorization: localStorage.getItem("token")
+    try{
+      if (!name) return toast.error("Board name required");
+      setLoading(true);
+      
+      const res = await axios.post(`${BACKEND_URL}/board`,
+        { name },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
         }
-      }
-    );
-    setBoards(prev => [...prev, res.data]);
-    setName("");
-    toast.success("Board Created");
+      );
+      setBoards(prev => [...prev, res.data]);
+      setName("");
+      toast.success("Board Created");
+    } catch(err){
+      toast.error("Board no created");
+    } finally{
+      setLoading(false)
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col font-used gap-5 mt-10 justify-center items-center">

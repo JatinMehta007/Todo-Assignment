@@ -2,27 +2,42 @@ import { RiDeleteBin6Fill } from "@remixicon/react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BACKEND_URL } from "../../config";
+import { useState } from "react";
+import { Spinner } from "./Spinner";
 
 export function Todos({ todos, setTodos }) {
+      const [loading, setLoading] = useState(false);
 
       const markCompleted = async (id) => {
-        await fetch("http://localhost:3000/completed", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ id })
-        });
-    
-        setTodos(prev =>
-          prev.map(todo =>
-            todo._id === id ? { ...todo, completed: true } : todo
-          )
-        );
+        try {
+          setLoading(true);
+          await axios.put(`${BACKEND_URL}/completed`, 
+            { id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: localStorage.getItem("token")
+              }
+            }
+          );
+      
+          setTodos(prev =>
+            prev.map(todo =>
+              todo._id === id ? { ...todo, completed: true } : todo
+            )
+          );
+          toast.success("Marked Completed");
+        } catch (err) {
+          toast.error("Failed to update");
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
       };
     
       const Deleted = async (id)=>{
          try{
+          setLoading(true);
           const res = await axios.delete(`${BACKEND_URL}/todo/${id}`,{
             headers : {
               Authorization : localStorage.getItem("token")
@@ -34,9 +49,18 @@ export function Todos({ todos, setTodos }) {
          } catch(err){
           toast.error("Delete Failed");
           console.error(err);
+         } finally{
+          setLoading(false);
          }
       }
 
+      if (loading) {
+        return (
+          <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm">
+            <Spinner />
+          </div>
+        );
+      }
       return (
         <div className="flex flex-col mt-24 font-used justify-center items-center gap-10">
           { todos.length === 0 ? ( 

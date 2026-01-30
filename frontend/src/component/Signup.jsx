@@ -3,15 +3,18 @@ import { useState } from "react"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
+import { Spinner } from "./Spinner";
 
 export function Signup() {
     const [username, setUsername] = useState();
     const [email, setEmail] = useState();
     const [password,setPassword] = useState();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleSignup = async ()=>{
         try{
+            setLoading(true);
             const res = await axios.post(`${BACKEND_URL}/signup`,{
                 username,
                 email,
@@ -23,8 +26,17 @@ export function Signup() {
         } catch (err) {
             toast.error("Signup Failed");
             console.error(err);
+        } finally{
+            setLoading(false);
         }
     }
+    if (loading) {
+        return (
+          <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm">
+            <Spinner />
+          </div>
+        );
+      }
     return (
         <div className="w-screen flex justify-center items-center h-screen bg-black">
             <div className=" w-[70%]  rounded-3xl bg-[#252525] h-[70%]">

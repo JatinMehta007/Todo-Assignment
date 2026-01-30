@@ -3,14 +3,17 @@ import { useState } from "react"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../../config";
+import { Spinner } from "./Spinner";
 
 export function Login() {
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
+    const [loading,setLoading] = useState(false);
 
     const handleLogin = async ()=>{
         try{
+            setLoading(true);
             const res = await axios.post(`${BACKEND_URL}/login`,{
                 email,
                 password
@@ -23,8 +26,18 @@ export function Login() {
             toast.error("Login Failed");
             console.error(err);
             console.log(err.response?.data); 
-        } 
+        } finally{
+            setLoading(false);
+        }
     }
+
+    if (loading) {
+        return (
+          <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm">
+            <Spinner />
+          </div>
+        );
+      }
     return (
         <div className="w-screen flex justify-center items-center h-screen bg-black">
             <div className=" w-[70%]  rounded-3xl bg-[#252525] h-[70%]">
@@ -35,7 +48,7 @@ export function Login() {
               
                 <div className="text-zinc-400 bg-black h-[80%]  flex-col text-center flex justify-center items-center  font-semibold ">
                     <div className="bg-black border border-zinc-700 rounded-2xl p-7">
-                    <p className="text-2xl text-zinc-400 font-semibold ">Create Todo's</p>
+                    <p className="text-2xl text-zinc-400 font-semibold ">Welcome Back</p>
                     <p>Don't have an account? <span className="text-blue-500 cursor-pointer" onClick={()=>navigate("/signup")}>Signup</span></p>
 
                     <div className="text-start mt-10">

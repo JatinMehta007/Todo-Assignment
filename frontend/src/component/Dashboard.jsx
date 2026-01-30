@@ -38,7 +38,6 @@ export function Dashboard() {
       <div className="mt-6">
       <Boards  boards={boards} setBoards={setBoards} setSelectedBoard={setSelectedBoard} />
       </div>
-    
 
     </div>
   );

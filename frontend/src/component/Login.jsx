@@ -30,7 +30,6 @@ export function Login() {
                 
                     <div className="px-5 font-black text-zinc-400 text-3xl">
                         Todo<span className="inline-block bg-blue-500 rounded-full h-2 w-2 "></span>Board
-                 
                     </div>
               
                 <div className="text-zinc-400 bg-black h-[80%]  flex-col text-center flex justify-center items-center  font-semibold ">

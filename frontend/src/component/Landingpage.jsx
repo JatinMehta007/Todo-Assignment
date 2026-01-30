@@ -22,7 +22,6 @@ export function LandingPage(){
     </svg>
      </span>
      </div>
-
      <div className="text-2xl text-zinc-600  w-[55%] text-center mt-5 font-light">
      Create boards, organize todos, and stay focused with our simple task management app.
      </div>

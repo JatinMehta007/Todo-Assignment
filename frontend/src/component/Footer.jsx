@@ -9,6 +9,7 @@ export function Footer(){
         <p className="font-semibold">Made by Jatin</p>
         <div className="flex gap-5">
         <RiLinkedinFill />
+        
         <RiGithubFill />
         </div>
         </div>

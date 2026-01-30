@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "./Navbar";
 import { Boards } from "./Board";
 import { CreateBoard } from "./CreateBoard";
+import { BACKEND_URL } from "../../config";
 
 export function Dashboard() {
   const [todos, setTodos] = useState([]);
@@ -9,7 +10,7 @@ export function Dashboard() {
   const [selectedBoard, setSelectedBoard] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/boards", {
+    fetch(`${BACKEND_URL}/boards`, {
       headers: { Authorization: localStorage.getItem("token") }
     })
       .then(res => res.json())
@@ -20,7 +21,7 @@ export function Dashboard() {
   useEffect(() => {
     if (!selectedBoard) return;
 
-    fetch(`http://localhost:3000/todos/${selectedBoard}`, {
+    fetch(`${BACKEND_URL}/todos/${selectedBoard}`, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": localStorage.getItem("token")

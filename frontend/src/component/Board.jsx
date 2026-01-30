@@ -2,13 +2,14 @@ import { RiDeleteBin6Fill } from "@remixicon/react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 
 export function Boards({ boards,setBoards }) {
   const navigate = useNavigate();
   
   const deleteBoard = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/board/${id}`, {
+      await axios.delete(`${BACKEND_URL}/board/${id}`, {
         headers: {
           Authorization: localStorage.getItem("token")
         }
@@ -21,7 +22,7 @@ export function Boards({ boards,setBoards }) {
       toast.error("Delete failed");
     }
   };
-  
+
   return (
     <div>
       {boards.map(board => (

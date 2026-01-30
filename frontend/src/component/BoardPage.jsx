@@ -4,6 +4,7 @@ import { Navbar } from "./Navbar";
 import { CreateTodo } from "./CreateTodo";
 import { Todos } from "./Todos";
 import axios from "axios";
+import { BACKEND_URL } from "../../config";
 
 export function BoardPage() {
   const { id } = useParams(); 
@@ -12,7 +13,7 @@ export function BoardPage() {
   const [boardName, setBoardName] = useState("");
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/todos/${id}`, {
+    axios.get(`${BACKEND_URL}/todos/${id}`, {
         headers: {
           Authorization: localStorage.getItem("token")
         }
@@ -23,7 +24,7 @@ export function BoardPage() {
 
   // fetch board name
   useEffect(() => {
-    axios.get(`http://localhost:3000/board/${id}`, {
+    axios.get(`${BACKEND_URL}/board/${id}`, {
         headers: {
           Authorization: localStorage.getItem("token")
         }

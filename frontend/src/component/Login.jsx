@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../config";
 
 export function Login() {
     const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ export function Login() {
 
     const handleLogin = async ()=>{
         try{
-            const res = await axios.post("http://localhost:3000/login",{
+            const res = await axios.post(`${BACKEND_URL}/login`,{
                 email,
                 password
             });

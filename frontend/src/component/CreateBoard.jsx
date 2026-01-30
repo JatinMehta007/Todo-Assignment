@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../config";
 
 export function CreateBoard({ setBoards , boards}) {
   const [name, setName] = useState("");
@@ -10,7 +11,7 @@ export function CreateBoard({ setBoards , boards}) {
     if (!name) return toast.error("Board name required");
 
     const res = await axios.post(
-      "http://localhost:3000/board",
+      `${BACKEND_URL}/board`,
       { name },
       {
         headers: {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../config";
 
 export function CreateTodo({setTodos}) {
    const [title, setTitle] = useState("");
@@ -21,7 +22,7 @@ export function CreateTodo({setTodos}) {
 
       <button className="bg-[#0083ff] text-white    px-5 font-bold py-3" onClick={() => {
          
-         fetch("http://localhost:3000/todo", {
+         fetch(`${BACKEND_URL}/todo`, {
             method: "POST",
             body: JSON.stringify({ title, description }),
             headers: {

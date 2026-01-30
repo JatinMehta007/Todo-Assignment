@@ -1,6 +1,7 @@
 import { RiDeleteBin6Fill } from "@remixicon/react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../../config";
 
 export function Todos({ todos, setTodos }) {
 
@@ -22,7 +23,7 @@ export function Todos({ todos, setTodos }) {
     
       const Deleted = async (id)=>{
          try{
-          const res = await axios.delete(`http://localhost:3000/todo/${id}`,{
+          const res = await axios.delete(`${BACKEND_URL}/todo/${id}`,{
             headers : {
               Authorization : localStorage.getItem("token")
             }

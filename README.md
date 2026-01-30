@@ -4,13 +4,6 @@
 A modern task management web app where users can create boards and manage todos efficiently.
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge" />
-</p>
-
 ---
 
 ## ✨ Features
@@ -44,6 +37,7 @@ A modern task management web app where users can create boards and manage todos 
 
 ## 📁 Folder Structure
 
+```
 todo-board/
 ├── backend/
 │   ├── index.js
@@ -54,7 +48,7 @@ todo-board/
 ├── frontend/
 │   ├── src/
 │   └── package.json
-
+```
 ---
 
 ## ⚙️ Environment Variables

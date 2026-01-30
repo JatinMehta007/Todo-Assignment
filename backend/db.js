@@ -2,13 +2,16 @@ require('dotenv').config();
 
 const mongoose = require("mongoose")
 
-
 mongoose.connect(process.env.MONGODB_URI);
 
 const todoSchema = new mongoose.Schema({
     title : String,
     description: String,
-    completed : Boolean
+    completed : Boolean,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }
 });
 
 const UserSchema = new mongoose.Schema({
